@@ -1,0 +1,66 @@
+# Maven build folders
+/target/
+/build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+.apt_generated/
+.factorypath
+.springBeans
+.st4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/build/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Java
+*.class
+
+# Environment config
+.env
+*.env
+
+# User data / credentials
+*.key
+*.pem
+*.crt
+
+# Selenium temp / Chrome profiles
+/chrome-profile/
+/whatsapp-profile*/  # אם אתה שומר פרופיל ייעודי להרצה
+
+# JSON runtime data
+*.json
+
+# Cache directories
+.cache/
+tmp/
+*.tmp
+
+# OS-specific
+Icon?
+._*
