@@ -51,7 +51,7 @@ public class WebDriverInitialize {
             driver.navigate().refresh();
 
             // Wait for page to load and check if login is needed
-            waitForWhatsAppToLoad(driver);
+            SeleniumUtils.waitForWhatsAppToLoad(driver);
 
             // Save cookies after successful load
             saveCookiesToFile(driver);
@@ -178,33 +178,6 @@ public class WebDriverInitialize {
                 }
             }
             directory.delete();
-        }
-    }
-
-    private static void waitForWhatsAppToLoad(WebDriver driver) {
-        try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-
-            // Wait for either QR code (need to scan) or chat interface (already logged in)
-            try {
-                // Check if we need to scan QR code
-                wait.until(ExpectedConditions.or(
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//canvas[@role='img']")), // QR code
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@data-testid='chat-list']")), // Chat list
-                        ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@class, 'landing-window')]")) // Landing page
-                ));
-
-                // Additional wait to ensure page is fully loaded
-                Thread.sleep(3000);
-
-                System.out.println("WhatsApp Web loaded successfully");
-
-            } catch (Exception e) {
-                System.out.println("Timeout waiting for WhatsApp to load. Manual intervention may be required.");
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error waiting for WhatsApp to load: " + e.getMessage());
         }
     }
 

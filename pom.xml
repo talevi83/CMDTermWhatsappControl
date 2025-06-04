@@ -28,6 +28,13 @@
             <artifactId>gson</artifactId>
             <version>2.13.1</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.semanticlocators/semantic-locators -->
+        <dependency>
+            <groupId>com.google.semanticlocators</groupId>
+            <artifactId>semantic-locators</artifactId>
+            <version>2.1.0</version>
+        </dependency>
     </dependencies>
 
 
