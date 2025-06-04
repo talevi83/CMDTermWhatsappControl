@@ -27,10 +27,12 @@ public class WhatsappListener {
 
         ((JavascriptExecutor) driver).executeScript(jsObserver);
 
-        // מתחילים לולאה בצד Java כדי לבדוק מדי פעם אם יש newMessages
+        System.out.println("Start listening to whatsapp messages.");
+
+        // Starting a loop to check every 1 second whether there is a new message or not.
         while (true) {
             try {
-                Thread.sleep(1000); // מחכה שניה בין בדיקות
+                Thread.sleep(1000); // wait 1 second between each iteration.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -51,11 +53,14 @@ public class WhatsappListener {
 
                     String line;
                     System.out.println("---- Output of the command ----");
+                    StringBuilder sb = new StringBuilder("");
                     while ((line = reader.readLine()) != null) {
                         System.out.println(line);
+                        sb.append(line + "\n");
                     }
                     reader.close();
 
+                    SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
                     // מחכה לסיום התהליך ומדפיס exit code
                     int exitCode = process.waitFor();
                     System.out.println("Exit Code: " + exitCode);

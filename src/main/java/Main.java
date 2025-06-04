@@ -22,19 +22,7 @@ public class Main {
     }
 
     protected static void readLastMessage() throws IOException, InterruptedException {
-        List<WebElement> lastMessage = SeleniumUtils.waitForElements(driver, By.cssSelector("div.copyable-text[data-pre-plain-text*='Tal Levi']"), 10);
-//        String lastMessageTxt = lastMessage.get(lastMessage.size()-1).getText();
         WhatsappListener.listenToNewMessages(driver);
-    }
-
-    protected static void listenToChanges() {
-        try {
-            WhatsappListener.listenToNewMessages(driver);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static void main(String[] args) throws Exception {

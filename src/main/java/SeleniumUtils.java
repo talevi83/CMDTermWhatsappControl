@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -46,6 +47,13 @@ public class SeleniumUtils {
 
         } catch (Exception e) {
             System.err.println("Error waiting for WhatsApp to load: " + e.getMessage());
+        }
+    }
+
+    protected static void sendResponseOnWhatsapp(WebDriver driver, String msg) {
+        List<WebElement> msgTextBox = driver.findElements(By.cssSelector("div[contenteditable='true'][data-tab='10']"));
+        if (msgTextBox.size() > 0) {
+            msgTextBox.get(0).sendKeys(msg.replaceAll("\t", "").replaceAll("\\n", Keys.chord(Keys.ALT, Keys.ENTER)) + Keys.ENTER);
         }
     }
 }

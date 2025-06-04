@@ -42,18 +42,12 @@ public class WebDriverInitialize {
             System.out.println("Navigate to web.whatsapp.com");
             driver.get("https://web.whatsapp.com");
 
-            // Load cookies before refresh
-            loadCookiesFromFile(driver);
-
             // Wait a bit before refresh
             Thread.sleep(2000);
             driver.navigate().refresh();
 
             // Wait for page to load and check if login is needed
             SeleniumUtils.waitForWhatsAppToLoad(driver);
-
-            // Save cookies after successful load
-            saveCookiesToFile(driver);
 
         } catch (Exception e) {
             System.err.println("Error during WebDriver initialization: " + e.getMessage());
@@ -89,6 +83,9 @@ public class WebDriverInitialize {
         options.addArguments("--ignore-certificate-errors");
         options.addArguments("--ignore-ssl-errors");
         options.addArguments("--ignore-certificate-errors-spki-list");
+
+        // Run with headless mode.
+//        options.addArguments("--headless=new");
 
         // Anti-detection measures
         options.addArguments("--user-agent=" + USER_AGENT);
