@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         try {
-            driver = WebDriverInitialize.initilizeWebDriver();
+            driver = WebDriverInitialize.initializeWebDriver();
 
         } catch (Exception e) {
             e.printStackTrace();
