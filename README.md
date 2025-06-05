@@ -52,6 +52,7 @@ chrome.profile.windows.path = \\AppData\\Local\\Google\\Chrome\\User Data\\profi
 # WhatsApp chat name (can be a person or group)
 whatsapp.contact = My Phone
 
+##
 
 🛠️ Build & Run
 1. Build the JAR with Maven
@@ -64,4 +65,3 @@ Do not include it inside the JAR — the app loads it externally.
 
 3. Run the JAR
 java -jar CMDWhatsappControl.jar
-
