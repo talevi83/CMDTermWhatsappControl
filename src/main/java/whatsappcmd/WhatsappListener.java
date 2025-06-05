@@ -42,7 +42,6 @@ public class WhatsappListener {
                 e.printStackTrace();
             }
 
-            // קוראים את המערך window.newMessages מ־JS
             @SuppressWarnings("unchecked")
             List<String> newMessages = (List<String>) ((JavascriptExecutor) driver)
                     .executeScript("var msgs = window.newMessages.slice(); window.newMessages = []; return msgs;");
