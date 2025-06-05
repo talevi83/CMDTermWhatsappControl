@@ -13,7 +13,7 @@ import static whatsappcmd.GlobalVariables.*;
 
 public class WhatsappListener {
     public static String listenToNewMessages (WebDriver driver) throws IOException, InterruptedException {
-        // עכשיו מזריקים JS שמגדיר MutationObserver
+        // Inject JS MutationObserver.
         String jsObserver = ""
                 + "var container = document.querySelector('div[data-tab=\"8\"][role=\"application\"]');"
                 + "window.newMessages = [];"

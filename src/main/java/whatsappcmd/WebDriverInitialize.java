@@ -4,8 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import org.openqa.selenium.By;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -107,7 +105,7 @@ public class WebDriverInitialize {
             // Destination profile path
             Path destProfile;
 
-//            if(!GlobalVariables.OS.toLowerCase().contains("windows")) {
+
                 destProfile = Paths.get(HOME_DIRECTORY + "/selenium_profiles/whatsapp_profile");
 
                 // Always refresh the profile to get latest data
@@ -125,9 +123,6 @@ public class WebDriverInitialize {
                     System.out.println("Source profile not found. Using default profile.");
                     return null;
                 }
-//            } else {
-//                destProfile = Paths.get(GlobalVariables.HOME_DIRECTORY + CHROME_PROFILE_PATH);
-//            }
 
             return destProfile.toString();
 

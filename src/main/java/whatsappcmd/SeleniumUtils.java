@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+import static whatsappcmd.GlobalVariables.*;
+
 
 public class SeleniumUtils {
     protected static WebElement waitForElement(WebDriver driver, By locator, int timeoutInSeconds) {
@@ -57,5 +59,16 @@ public class SeleniumUtils {
         if (msgTextBox.size() > 0) {
             msgTextBox.get(0).sendKeys(msg.replaceAll("\t", "").replaceAll("\\n", Keys.chord(Keys.ALT, Keys.ENTER)) + Keys.ENTER);
         }
+    }
+
+    protected static void navigateToMyPhoneChat() throws InterruptedException {
+        WebElement searchTextBox = SeleniumUtils.waitForElement(driver,  By.cssSelector("div[role='textbox']"), 10);
+        searchTextBox.click();
+        Thread.sleep(Duration.ofSeconds(1));
+        searchTextBox.sendKeys(properties.getProperty("whatsapp.contact"));
+        Thread.sleep(Duration.ofSeconds(1));
+        List<WebElement> myChat = driver.findElements(
+                By.xpath("//span[contains(text(), 'הטלפון שלי')]"));
+        myChat.get(1).click();
     }
 }
