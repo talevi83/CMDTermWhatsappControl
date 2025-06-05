@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class WebDriverInitialize {
 
-    private static final String COOKIE_FILE_NAME = "src/main/resources/whatsapp_cookies.json";
+//    private static final String COOKIE_FILE_NAME = "src/main/resources/whatsapp_cookies.json";
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
     protected static WebDriver initializeWebDriver() {
@@ -107,27 +107,34 @@ public class WebDriverInitialize {
     private static String setupProfile() {
         try {
             // Source profile path - make this configurable
-            Path sourceProfile = Paths.get("/Users/tallevi/Library/Application Support/Google/Chrome/Profile 1");
+            Path sourceProfile = Paths.get("/Users/" + Constants.HOME_DIRECTORY + "/Library/Application Support/Google/Chrome/Profile 1");
 
             // Destination profile path
-            Path destProfile = Paths.get(System.getProperty("user.home") + "/selenium_profiles/whatsapp_profile");
+            Path destProfile;
 
-            // Always refresh the profile to get latest data
-            if (Files.exists(sourceProfile)) {
-                System.out.println("Refreshing Chrome profile...");
+            if(!Constants.OS.toLowerCase().contains("windows")) {
+                destProfile = Paths.get(Constants.HOME_DIRECTORY + "/selenium_profiles/whatsapp_profile");
+                // Always refresh the profile to get latest data
+                if (Files.exists(sourceProfile)) {
+                    System.out.println("Refreshing Chrome profile...");
 
-                // Delete old profile if exists
-                if (Files.exists(destProfile)) {
-                    deleteDirectory(destProfile.toFile());
+                    // Delete old profile if exists
+                    if (Files.exists(destProfile)) {
+                        deleteDirectory(destProfile.toFile());
+                    }
+
+                    // Copy fresh profile
+                    copyDirectory(sourceProfile, destProfile);
+                    return destProfile.toString();
+                } else {
+                    System.out.println("Source profile not found. Using default profile.");
+                    return null;
                 }
-
-                // Copy fresh profile
-                copyDirectory(sourceProfile, destProfile);
-                return destProfile.toString();
             } else {
-                System.out.println("Source profile not found. Using default profile.");
-                return null;
+                destProfile = Paths.get(Constants.HOME_DIRECTORY + "\\AppData\\Local\\Google\\Chrome\\User Data");
             }
+
+            return destProfile.toString();
 
         } catch (Exception e) {
             System.err.println("Error setting up profile: " + e.getMessage());
@@ -201,6 +208,7 @@ public class WebDriverInitialize {
         }
     }
 
+    /*
     protected static void saveCookiesToFile(WebDriver driver) {
         try {
             Set<Cookie> cookies = driver.manage().getCookies();
@@ -251,7 +259,7 @@ public class WebDriverInitialize {
             System.err.println("Error loading cookies: " + e.getMessage());
             e.printStackTrace();
         }
-    }
+    } */
 
     // Additional utility method to check if WhatsApp is properly connected
     public static boolean isWhatsAppConnected(WebDriver driver) {
