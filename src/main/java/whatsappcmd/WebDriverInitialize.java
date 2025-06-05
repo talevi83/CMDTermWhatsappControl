@@ -15,7 +15,6 @@ import static whatsappcmd.GlobalVariables.*;
 
 public class WebDriverInitialize {
 
-//    private static final String COOKIE_FILE_NAME = "src/main/resources/whatsapp_cookies.json";
     private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
     protected static void initializeWebDriver() {
