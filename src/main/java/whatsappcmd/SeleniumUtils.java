@@ -65,10 +65,10 @@ public class SeleniumUtils {
         WebElement searchTextBox = SeleniumUtils.waitForElement(driver,  By.cssSelector("div[role='textbox']"), 10);
         searchTextBox.click();
         Thread.sleep(Duration.ofSeconds(1));
-        searchTextBox.sendKeys(properties.getProperty("whatsapp.contact"));
+        searchTextBox.sendKeys(CONTACT);
         Thread.sleep(Duration.ofSeconds(1));
         List<WebElement> myChat = driver.findElements(
-                By.xpath("//span[contains(text(), 'הטלפון שלי')]"));
+                By.xpath("//span[contains(text(), '" + CONTACT + "')]"));
         myChat.get(1).click();
     }
 }

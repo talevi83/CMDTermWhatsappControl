@@ -15,6 +15,7 @@ public abstract class GlobalVariables {
     protected static final String CHROME_PROFILE_PATH = OS.toLowerCase().contains("windows") ?
             HOME_DIRECTORY + properties.getProperty("chrome.profile.windows.path") :
             HOME_DIRECTORY + properties.getProperty("chrome.profile.mac.path");
+    protected static String CONTACT = properties.getProperty("whatsapp.contact");
 
     protected static String CMD_TERM = OS.toLowerCase().contains("windows") ? "cmd.exe" : "/bin/sh";
     protected static String CMD_FLAG = OS.toLowerCase().contains("windows") ? "/c" : "-c";
