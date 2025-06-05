@@ -1,6 +1,5 @@
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import org.openqa.selenium.Cookie;
+package whatsappcmd;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -8,17 +7,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.By;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
-import java.util.Set;
-
+import static whatsappcmd.GlobalVariables.*;
 
 public class WebDriverInitialize {
 
@@ -107,13 +102,14 @@ public class WebDriverInitialize {
     private static String setupProfile() {
         try {
             // Source profile path - make this configurable
-            Path sourceProfile = Paths.get("/Users/" + Constants.HOME_DIRECTORY + "/Library/Application Support/Google/Chrome/Profile 1");
+            Path sourceProfile = Paths.get(CHROME_PROFILE_PATH);
 
             // Destination profile path
             Path destProfile;
 
-            if(!Constants.OS.toLowerCase().contains("windows")) {
-                destProfile = Paths.get(Constants.HOME_DIRECTORY + "/selenium_profiles/whatsapp_profile");
+//            if(!GlobalVariables.OS.toLowerCase().contains("windows")) {
+                destProfile = Paths.get(HOME_DIRECTORY + "/selenium_profiles/whatsapp_profile");
+
                 // Always refresh the profile to get latest data
                 if (Files.exists(sourceProfile)) {
                     System.out.println("Refreshing Chrome profile...");
@@ -125,14 +121,13 @@ public class WebDriverInitialize {
 
                     // Copy fresh profile
                     copyDirectory(sourceProfile, destProfile);
-                    return destProfile.toString();
                 } else {
                     System.out.println("Source profile not found. Using default profile.");
                     return null;
                 }
-            } else {
-                destProfile = Paths.get(Constants.HOME_DIRECTORY + "\\AppData\\Local\\Google\\Chrome\\User Data");
-            }
+//            } else {
+//                destProfile = Paths.get(GlobalVariables.HOME_DIRECTORY + CHROME_PROFILE_PATH);
+//            }
 
             return destProfile.toString();
 

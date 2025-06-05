@@ -1,10 +1,15 @@
+package whatsappcmd;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import static whatsappcmd.GlobalVariables.*;
 
 public class WhatsappListener {
     public static String listenToNewMessages (WebDriver driver) throws IOException, InterruptedException {
@@ -44,9 +49,10 @@ public class WhatsappListener {
 
             if (newMessages != null && !newMessages.isEmpty()) {
                 String lastMessage = newMessages.getLast();
-                if(lastMessage.contains("CMD:")) {
+                if(lastMessage.contains("CMD:") && checkMessageTime(lastMessage)) {
                     lastMessage = lastMessage.split(": ")[1].split("\\n")[0];
-                    Process process = Runtime.getRuntime().exec(lastMessage);
+                    System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
+                    Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
                     // קורא את ה־output (ה־stdout)
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(process.getInputStream()));
@@ -67,5 +73,22 @@ public class WhatsappListener {
                 }
             }
         }
+    }
+
+    private static boolean checkMessageTime(String lastMessage) {
+
+        lastMessage = lastMessage.split("\n")[1];
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        // convert to LocalTime
+        LocalTime inputTime = LocalTime.parse(lastMessage, formatter);
+        LocalTime now = LocalTime.now();
+
+        // Calculate time difference.
+        long secondsDiff = Math.abs(now.toSecondOfDay() - inputTime.toSecondOfDay());
+
+        // Check if the time difference is higher than 60 seconds.
+        return secondsDiff < 60;
     }
 }

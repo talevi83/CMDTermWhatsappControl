@@ -1,10 +1,14 @@
+package whatsappcmd;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
+
+
+import static whatsappcmd.GlobalVariables.*;
 
 public class Main {
 
@@ -18,21 +22,15 @@ public class Main {
         Thread.sleep(Duration.ofSeconds(1));
         List<WebElement> myChat = driver.findElements(
                 By.xpath("//span[contains(text(), 'הטלפון שלי')]"));
-        myChat.get(1).click(); // אם אתה רוצה ללחוץ עליו
-    }
-
-    protected static void readLastMessage() throws IOException, InterruptedException {
-        WhatsappListener.listenToNewMessages(driver);
+        myChat.get(1).click();
     }
 
     public static void main(String[] args) throws Exception {
         try {
-
-
+            System.out.println("OS detected: " + OS);
             driver = WebDriverInitialize.initializeWebDriver();
-            System.out.println();
             navigateToMyPhoneChat();
-            readLastMessage();
+            WhatsappListener.listenToNewMessages(driver);
         } catch (Exception e) {
             e.printStackTrace();
             driver.quit();
