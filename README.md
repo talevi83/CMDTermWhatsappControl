@@ -65,10 +65,13 @@ whatsapp.contact = My Phone
    The JAR file will be generated under the `target/` folder.
 
 2. **Place `config.properties` next to the JAR file**
+   Config file placed inside the project under resources.
+   If you will not place a config.properties file next to the jar, this file will be used.
+   https://github.com/talevi83/CMDTermWhatsappControl/blob/main/src/main/resources/config.properties
 
    Do **not** include it inside the JAR — the app loads it externally at runtime.
 
-3. **Run the JAR**
+4. **Run the JAR**
 
    ```bash
    java -jar CMDWhatsappControl.jar
