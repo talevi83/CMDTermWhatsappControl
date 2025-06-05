@@ -50,9 +50,11 @@ public class WhatsappListener {
                 String lastMessage = newMessages.getLast();
                 if(lastMessage.contains("CMD:") && checkMessageTime(lastMessage)) {
                     lastMessage = lastMessage.split(": ")[1].split("\\n")[0];
+                    lastMessage = MessageWrapperConstants.checkMessageForWrapper(lastMessage);
                     System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
                     Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
-                    // קורא את ה־output (ה־stdout)
+
+                    // Read the output from the command line.
                     BufferedReader reader = new BufferedReader(
                             new InputStreamReader(process.getInputStream()));
 
