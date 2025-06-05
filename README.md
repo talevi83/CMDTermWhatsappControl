@@ -55,14 +55,22 @@ whatsapp.contact = My Phone
 ---
 
 ## 🛠️ Build & Run
-1. Build the JAR with Maven.
-    mvn clean package
 
-The JAR file will be generated under the target/ folder.
+1. **Build the JAR with Maven**
 
-2. Place config.properties next to the JAR file.
-Do not include it inside the JAR — the app loads it externally.
+   ```bash
+   mvn clean package
+   ```
 
-3. Run the JAR.
-java -jar CMDWhatsappControl.jar
+   The JAR file will be generated under the `target/` folder.
+
+2. **Place `config.properties` next to the JAR file**
+
+   Do **not** include it inside the JAR — the app loads it externally at runtime.
+
+3. **Run the JAR**
+
+   ```bash
+   java -jar CMDWhatsappControl.jar
+   ```
 
