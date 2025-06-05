@@ -4,7 +4,7 @@ import static whatsappcmd.GlobalVariables.*;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         try {
             System.out.println("OS detected: " + OS);
             driver = WebDriverInitialize.initializeWebDriver();
