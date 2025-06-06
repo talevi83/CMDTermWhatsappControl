@@ -94,6 +94,8 @@ public class WhatsappListener {
             }
         }
         if(!keepListening) {
+            System.out.println("Program is closing now...");
+            SeleniumUtils.sendResponseOnWhatsapp(driver, "Program is closing... Goodbye!");
             driver.quit();
         }
     }
