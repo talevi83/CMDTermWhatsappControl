@@ -66,26 +66,30 @@ public class WhatsappListener {
                     }
 
                     lastMessage = MessageWrapperConstants.checkMessageForWrapper(lastMessage);
-                    System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
-                    Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
+                    if(Boolean.parseBoolean(properties.get("restricted.commands").toString()) && lastMessage.startsWith("Restricted commands is enabled.")) {
+                        SeleniumUtils.sendResponseOnWhatsapp(driver, lastMessage);
+                    } else {
+                        System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
+                        Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
 
-                    // Read the output from the command line.
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(process.getInputStream()));
+                        // Read the output from the command line.
+                        BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(process.getInputStream()));
 
-                    String line;
-                    System.out.println("---- Output of the command ----");
-                    StringBuilder sb = new StringBuilder("");
-                    while ((line = reader.readLine()) != null) {
-                        System.out.println(line);
-                        sb.append(line + "\n");
+                        String line;
+                        System.out.println("---- Output of the command ----");
+                        StringBuilder sb = new StringBuilder("");
+                        while ((line = reader.readLine()) != null) {
+                            System.out.println(line);
+                            sb.append(line + "\n");
+                        }
+                        reader.close();
+
+                        SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
+
+                        int exitCode = process.waitFor();
+                        System.out.println("Exit Code: " + exitCode);
                     }
-                    reader.close();
-
-                    SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
-
-                    int exitCode = process.waitFor();
-                    System.out.println("Exit Code: " + exitCode);
                 }
             }
         }
@@ -97,6 +101,9 @@ public class WhatsappListener {
     private static void sendManualAtStart() {
         String commandsHelp = MessageWrapperConstants.getAvailableCommandsHelp();
         SeleniumUtils.sendResponseOnWhatsapp(driver, commandsHelp);
+        if(Boolean.parseBoolean(properties.get("restricted.messages").toString())){
+            SeleniumUtils.sendResponseOnWhatsapp(driver, "**Please Note! Restricted messages is Enabled!*");
+        }
     }
 
     private static boolean checkMessageTime(String lastMessage) {

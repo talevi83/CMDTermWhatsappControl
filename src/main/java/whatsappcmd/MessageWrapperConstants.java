@@ -31,8 +31,12 @@ public class MessageWrapperConstants {
         CommandInfo info = commandMap.get(msg);
         if (info != null) {
             return info.command;
+        } else if(Boolean.parseBoolean(GlobalVariables.properties.get("restricted.commands").toString())) {
+            return "Restricted commands is enabled.\n" +
+                    "Command '" + msg + "' not found.";
+        } else {
+            return msg;
         }
-        return msg;
     }
 
     public static String getAvailableCommandsHelp() {
