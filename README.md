@@ -41,6 +41,9 @@ To find your Chrome profile path:
 ## ⚙️ Configuration File: `config.properties`
 
 Place the following file in the **same directory as the JAR**:
+* The MacOS password is for Mac users that wants to run sudo commands.
+* This feature is not complete and fit for all the commands but integrated in shutdown command.
+* Please note that the password in NOT encrypted.
 
 ```properties
 # For macOS:
@@ -51,6 +54,9 @@ chrome.profile.windows.path = \\AppData\\Local\\Google\\Chrome\\User Data\\profi
 
 # WhatsApp chat name (can be a person or group)
 whatsapp.contact = My Phone
+
+# MacOS user password:
+mac.password = yourpassword
 ```
 ---
 
