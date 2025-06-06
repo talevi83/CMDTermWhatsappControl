@@ -102,7 +102,7 @@ public class WhatsappListener {
         }
     }
 
-    private static void sendManualAtStart() {
+    private static void sendManualAtStart() throws InterruptedException {
         String commandsHelp = MessageWrapperConstants.getAvailableCommandsHelp();
         SeleniumUtils.sendResponseOnWhatsapp(driver, commandsHelp);
         if(Boolean.parseBoolean(properties.get("restricted.commands").toString())){
