@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -96,6 +97,7 @@ public class WhatsappListener {
         if(!keepListening) {
             System.out.println("Program is closing now...");
             SeleniumUtils.sendResponseOnWhatsapp(driver, "Program is closing... Goodbye!");
+            Thread.sleep(Duration.ofSeconds(1));
             driver.quit();
         }
     }

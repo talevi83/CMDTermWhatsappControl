@@ -56,8 +56,8 @@ public class SeleniumUtils {
 
     protected static void sendResponseOnWhatsapp(WebDriver driver, String msg) {
         List<WebElement> msgTextBox = driver.findElements(By.cssSelector("div[contenteditable='true'][data-tab='10']"));
-        if (msgTextBox.size() > 0) {
-            msgTextBox.get(0).sendKeys(msg.replaceAll("\t", "").replaceAll("\\n", Keys.chord(Keys.ALT, Keys.ENTER)) + Keys.ENTER);
+        if (!msgTextBox.isEmpty()) {
+            msgTextBox.getFirst().sendKeys(msg.replaceAll("\t", "").replaceAll("\\n", Keys.chord(Keys.ALT, Keys.ENTER)) + Keys.ENTER);
         }
     }
 
