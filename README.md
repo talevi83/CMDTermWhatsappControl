@@ -91,13 +91,12 @@ restricted.commands = true
 ---
 ## ⚙️ Manual
 
-Available commands:
-To run command, the message should start with a prefix 'CMD: <command>'
-
- sleep            : Put the computer to sleep
- internal ip      : Get the internal (local) IP address
- cancel shutdown  : Cancel a pending shutdown (Windows only)
- external ip      : Get the external (public) IP address
- shutdown         : Shutdown the computer
- close program    : Closing the program and shutdown WebDriver.
- manual           : Get this manual.
+| Command          | Description                                    |
+|------------------|------------------------------------------------|
+| sleep            | Put the computer to sleep                      |
+| internal ip      | Get the internal (local) IP address            |
+| cancel shutdown  | Cancel a pending shutdown (Windows only)       |
+| external ip      | Get the external (public) IP address           |
+| shutdown         | Shutdown the computer                          |
+| close program    | Closing the program and shutdown WebDriver.    |
+| manual           | Get this manual.                               |
