@@ -36,8 +36,8 @@ public class MessageWrapperConstants {
     }
 
     public static String getAvailableCommandsHelp() {
-        StringBuilder sb = new StringBuilder("Available commands:\n");
-        sb.append("To run command, the message should start with a prefix 'CMD: <command>'");
+        StringBuilder sb = new StringBuilder("*Available commands:*\n");
+        sb.append("*To run command, the message should start with a prefix 'CMD: <command>'*\n\n");
 
         for (Map.Entry<String, CommandInfo> entry : commandMap.entrySet()) {
             sb.append(String.format(" %-16s : %s\n", entry.getKey(), entry.getValue().description));
