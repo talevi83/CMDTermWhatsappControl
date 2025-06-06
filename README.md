@@ -17,6 +17,7 @@ CMDWhatsappControl is a Java application that listens to WhatsApp Web via Seleni
 - Configurable WhatsApp contact or group name.
 - Chrome profile support for persistent WhatsApp Web sessions.
 - Configuration via external `config.properties` file.
+- Restricted commands flag - restrict to using only the commands that are preset in the program.
 - Built using Maven — no need to manually install ChromeDriver.
 
 ---
@@ -57,6 +58,9 @@ whatsapp.contact = My Phone
 
 # MacOS user password:
 mac.password = yourpassword
+
+# Restricted commands - When enabled, you can use only the commands that are preset in the program.
+restricted.commands = true
 ```
 ---
 
