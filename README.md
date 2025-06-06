@@ -18,6 +18,7 @@ CMDWhatsappControl is a Java application that listens to WhatsApp Web via Seleni
 - Chrome profile support for persistent WhatsApp Web sessions.
 - Configuration via external `config.properties` file.
 - Restricted commands flag - restrict to using only the commands that are preset in the program.
+- The program is sending manual at starting (if not send "CMD: manual").
 - Built using Maven — no need to manually install ChromeDriver.
 
 ---
@@ -87,3 +88,16 @@ restricted.commands = true
    java -jar CMDWhatsappControl.jar
    ```
 
+---
+## ⚙️ Manual
+
+Available commands:
+To run command, the message should start with a prefix 'CMD: <command>'
+
+ sleep            : Put the computer to sleep
+ internal ip      : Get the internal (local) IP address
+ cancel shutdown  : Cancel a pending shutdown (Windows only)
+ external ip      : Get the external (public) IP address
+ shutdown         : Shutdown the computer
+ close program    : Closing the program and shutdown WebDriver.
+ manual           : Get this manual.
