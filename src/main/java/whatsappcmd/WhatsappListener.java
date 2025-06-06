@@ -12,7 +12,7 @@ import java.util.List;
 import static whatsappcmd.GlobalVariables.*;
 
 public class WhatsappListener {
-    public static String listenToNewMessages (WebDriver driver) throws IOException, InterruptedException {
+    public static void listenToNewMessages (WebDriver driver) throws IOException, InterruptedException {
         // Inject JS MutationObserver.
         String jsObserver = ""
                 + "var container = document.querySelector('div[data-tab=\"8\"][role=\"application\"]');"
@@ -34,12 +34,20 @@ public class WhatsappListener {
 
         System.out.println("Start listening to whatsapp messages.");
 
+        boolean justStarted = true;
+        boolean keepListening = true;
+
         // Starting a loop to check every 1 second whether there is a new message or not.
-        while (true) {
+        while (keepListening) {
             try {
                 Thread.sleep(1000); // wait 1 second between each iteration.
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+
+            if(justStarted) {
+                sendManualAtStart();
+                justStarted = false;
             }
 
             @SuppressWarnings("unchecked")
@@ -50,6 +58,13 @@ public class WhatsappListener {
                 String lastMessage = newMessages.getLast();
                 if(lastMessage.contains("CMD:") && checkMessageTime(lastMessage)) {
                     lastMessage = lastMessage.split(": ")[1].split("\\n")[0];
+                    if(lastMessage.toLowerCase().equals("close program")){
+                        keepListening = false;
+                        break;
+                    } else if(lastMessage.toLowerCase().equals("manual")) {
+                        sendManualAtStart();
+                    }
+
                     lastMessage = MessageWrapperConstants.checkMessageForWrapper(lastMessage);
                     System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
                     Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
@@ -68,28 +83,41 @@ public class WhatsappListener {
                     reader.close();
 
                     SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
-                    // מחכה לסיום התהליך ומדפיס exit code
+
                     int exitCode = process.waitFor();
                     System.out.println("Exit Code: " + exitCode);
                 }
             }
         }
+        if(!keepListening) {
+            driver.quit();
+        }
+    }
+
+    private static void sendManualAtStart() {
+        String commandsHelp = MessageWrapperConstants.getAvailableCommandsHelp();
+        SeleniumUtils.sendResponseOnWhatsapp(driver, commandsHelp);
     }
 
     private static boolean checkMessageTime(String lastMessage) {
+        try {
+            lastMessage = lastMessage.split("\n")[1];
 
-        lastMessage = lastMessage.split("\n")[1];
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            // convert to LocalTime
+            LocalTime inputTime = LocalTime.parse(lastMessage, formatter);
+            LocalTime now = LocalTime.now();
 
-        // convert to LocalTime
-        LocalTime inputTime = LocalTime.parse(lastMessage, formatter);
-        LocalTime now = LocalTime.now();
+            // Calculate time difference.
+            long secondsDiff = Math.abs(now.toSecondOfDay() - inputTime.toSecondOfDay());
 
-        // Calculate time difference.
-        long secondsDiff = Math.abs(now.toSecondOfDay() - inputTime.toSecondOfDay());
+            // Check if the time difference is higher than 60 seconds.
+            return secondsDiff < 60;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
 
-        // Check if the time difference is higher than 60 seconds.
-        return secondsDiff < 60;
     }
 }
