@@ -55,10 +55,10 @@ chrome.profile.mac.path = /Library/Application Support/Google/Chrome/Profile 1
 chrome.profile.windows.path = \\AppData\\Local\\Google\\Chrome\\User Data\\profile 2
 
 # WhatsApp chat name (can be a person or group)
-whatsapp.contact = My Phone
+whatsapp.contact = <contact_or_group>
 
 # MacOS user password:
-mac.password = yourpassword
+mac.password = <your_password>
 
 # Restricted commands - When enabled, you can use only the commands that are preset in the program.
 restricted.commands = true
