@@ -75,7 +75,9 @@ public class WebDriverInitialize {
         options.addArguments("--ignore-certificate-errors-spki-list");
 
         // Run with headless mode.
-        options.addArguments("--headless=new");
+        if(Boolean.parseBoolean(properties.get("headless.mode").toString())) {
+            options.addArguments("--headless=new");
+        }
 
         // Anti-detection measures
         options.addArguments("--user-agent=" + USER_AGENT);

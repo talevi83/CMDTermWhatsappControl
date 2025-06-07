@@ -63,6 +63,7 @@ public class WhatsappListener {
                         keepListening = false;
                         break;
                     } else if(lastMessage.toLowerCase().equals("manual")) {
+                        Thread.sleep(1);
                         sendManualAtStart();
                     }
 
