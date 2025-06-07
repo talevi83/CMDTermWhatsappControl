@@ -71,6 +71,12 @@ public class WhatsappListener {
                     if(Boolean.parseBoolean(properties.get("restricted.commands").toString()) && lastMessage.startsWith("Restricted commands is enabled.")) {
                         SeleniumUtils.sendResponseOnWhatsapp(driver, lastMessage);
                     } else {
+                        if(lastMessage.contains("rundll32.exe powrprof.dll,SetSuspendState")) {
+                            String msg = "Closing program before sleep...";
+                            SeleniumUtils.sendResponseOnWhatsapp(driver, msg);
+                            System.out.println(msg);
+                            driver.quit();
+                        }
                         System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
                         Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
 
