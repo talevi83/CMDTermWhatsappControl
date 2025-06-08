@@ -103,11 +103,9 @@ public class WhatsappListener {
                             SeleniumUtils.sendResponseOnWhatsapp(driver, commandOutput);
                         }
                     } else {
-                        // לא נמצאה פקודה מוכרת
                         if (isRestrictedMode) {
                             SeleniumUtils.sendResponseOnWhatsapp(driver, "Restricted commands is enabled. Only predefined commands are allowed.");
                         } else {
-                            // לא במצב מוגבל - מריץ כטקסט חופשי ב־cmd
                             System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + userInput);
                             Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, userInput});
 

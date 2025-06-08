@@ -5,7 +5,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -26,6 +25,13 @@ public class SeleniumUtils {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         return driver.findElements(locator);
+    }
+
+    protected static WebElement waitForElementToBeClickable(WebDriver driver, WebElement element, int timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+        System.out.println("Element is clickable: " + element.getText());
+        return element;
     }
 
     protected static void waitForWhatsAppToLoad(WebDriver driver) {
@@ -69,8 +75,18 @@ public class SeleniumUtils {
         Thread.sleep(Duration.ofSeconds(1));
         searchTextBox.sendKeys(CONTACT);
         Thread.sleep(Duration.ofSeconds(1));
-        List<WebElement> myChat = driver.findElements(
-                By.xpath("//span[contains(text(), '" + CONTACT + "')]"));
-        myChat.get(1).click();
+        List<WebElement> myChats = waitForElements(driver,
+                By.xpath("//span[contains(text(), '" + CONTACT + "')]"), 1);
+        WebElement myChat = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.elementToBeClickable(
+                myChats.get(1)
+        ));
+
+        if(myChats.size() > 1) {
+            waitForElementToBeClickable(driver, myChats.get(1), 5).click();
+        } else if(myChats.size() == 1) {
+            waitForElementToBeClickable(driver, myChats.get(0), 5).click();
+        } else {
+            throw new RuntimeException("Contact not found in search results!");
+        }
     }
 }
