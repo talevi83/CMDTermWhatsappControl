@@ -16,4 +16,9 @@ public class HelpCommand implements Command {
     public String getDescription() {
         return "Show this help message";
     }
+
+    @Override
+    public boolean isShellCommand() {
+        return false;
+    }
 }

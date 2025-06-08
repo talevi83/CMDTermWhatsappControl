@@ -15,4 +15,9 @@ public class InternalIpCommand implements Command {
     public String getDescription() {
         return "Get internal IP address";
     }
+
+    @Override
+    public boolean isShellCommand() {
+        return true;
+    }
 }

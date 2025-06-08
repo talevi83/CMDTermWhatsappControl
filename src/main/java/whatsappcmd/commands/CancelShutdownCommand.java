@@ -10,4 +10,9 @@ public class CancelShutdownCommand implements Command {
     public String getDescription() {
         return "Cancel a pending shutdown (Windows only)";
     }
+
+    @Override
+    public boolean isShellCommand() {
+        return true;
+    }
 }

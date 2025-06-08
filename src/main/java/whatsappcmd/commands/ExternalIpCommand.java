@@ -11,4 +11,9 @@ public class ExternalIpCommand implements Command {
     public String getDescription() {
         return "Get external IP address";
     }
+
+    @Override
+    public boolean isShellCommand() {
+        return true;
+    }
 }

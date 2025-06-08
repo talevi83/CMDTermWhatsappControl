@@ -2,6 +2,7 @@ package whatsappcmd;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import whatsappcmd.commands.Command;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,47 +63,67 @@ public class WhatsappListener {
                     if(lastMessage.toLowerCase().equals("close program")){
                         keepListening = false;
                         break;
-                    } else if(lastMessage.toLowerCase().equals("manual")) {
-                        Thread.sleep(1);
-                        sendManualAtStart();
-                        continue;
                     }
 
-                    String commandToRun = CommandExecutor.processMessage(lastMessage);
-                    if(commandToRun == null) {
-                        SeleniumUtils.sendResponseOnWhatsapp(driver, "Unknown command: " + commandToRun);
-                        continue;
-                    }
-                    if(Boolean.parseBoolean(properties.get("restricted.commands").toString()) && commandToRun.startsWith("Restricted commands is enabled.")) {
-                        SeleniumUtils.sendResponseOnWhatsapp(driver, commandToRun);
+                    boolean isRestrictedMode = Boolean.parseBoolean(properties.get("restricted.commands").toString());
+                    String userInput = lastMessage;
+
+                    Command command = CommandExecutor.processMessage(userInput);
+
+                    if (command != null) {
+                        // פקודה מוכרת (כל מצב - תמיד עובד)
+                        String commandOutput = command.execute(new String[0]);
+
+                        if (command.isShellCommand()) {
+                            System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + commandOutput);
+                            Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, commandOutput});
+
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                            String line;
+                            StringBuilder sb = new StringBuilder("");
+                            while ((line = reader.readLine()) != null) {
+                                System.out.println(line);
+                                sb.append(line).append("\n");
+                            }
+                            reader.close();
+
+                            SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
+                            int exitCode = process.waitFor();
+                            System.out.println("Exit Code: " + exitCode);
+
+                            if (commandOutput.contains("rundll32.exe powrprof.dll,SetSuspendState")) {
+                                String msg = "Closing program before sleep...";
+                                SeleniumUtils.sendResponseOnWhatsapp(driver, msg);
+                                System.out.println(msg);
+                                driver.quit();
+                                Thread.sleep(2);
+                            }
+                        } else {
+                            // פקודה שמחזירה output (למשל help)
+                            SeleniumUtils.sendResponseOnWhatsapp(driver, commandOutput);
+                        }
                     } else {
-                        if(commandToRun.contains("rundll32.exe powrprof.dll,SetSuspendState")) {
-                            String msg = "Closing program before sleep...";
-                            SeleniumUtils.sendResponseOnWhatsapp(driver, msg);
-                            System.out.println(msg);
-                            driver.quit();
-                            Thread.sleep(2);
+                        // לא נמצאה פקודה מוכרת
+                        if (isRestrictedMode) {
+                            SeleniumUtils.sendResponseOnWhatsapp(driver, "Restricted commands is enabled. Only predefined commands are allowed.");
+                        } else {
+                            // לא במצב מוגבל - מריץ כטקסט חופשי ב־cmd
+                            System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + userInput);
+                            Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, userInput});
+
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                            String line;
+                            StringBuilder sb = new StringBuilder("");
+                            while ((line = reader.readLine()) != null) {
+                                System.out.println(line);
+                                sb.append(line).append("\n");
+                            }
+                            reader.close();
+
+                            SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
+                            int exitCode = process.waitFor();
+                            System.out.println("Exit Code: " + exitCode);
                         }
-                        System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + commandToRun);
-                        Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, commandToRun});
-
-                        // Read the output from the command line.
-                        BufferedReader reader = new BufferedReader(
-                                new InputStreamReader(process.getInputStream()));
-
-                        String line;
-                        System.out.println("---- Output of the command ----");
-                        StringBuilder sb = new StringBuilder("");
-                        while ((line = reader.readLine()) != null) {
-                            System.out.println(line);
-                            sb.append(line + "\n");
-                        }
-                        reader.close();
-
-                        SeleniumUtils.sendResponseOnWhatsapp(driver, sb.toString());
-
-                        int exitCode = process.waitFor();
-                        System.out.println("Exit Code: " + exitCode);
                     }
                 }
             }
@@ -124,9 +145,9 @@ public class WhatsappListener {
     }
 
     private static String getAvailableCommandsHelp() {
-        StringBuilder sb = new StringBuilder("Available Commands:\n");
+        StringBuilder sb = new StringBuilder("*Available Commands:*\n");
         CommandRegistry.getAllCommands().forEach((name, cmd) -> {
-            sb.append("- ").append(name).append(": ").append(cmd.getDescription()).append("\n");
+            sb.append("*- ").append(name).append(":* ").append(cmd.getDescription()).append("\n");
         });
         return sb.toString();
     }

@@ -18,4 +18,9 @@ public class ShutdownCommand implements Command {
     public String getDescription() {
         return "Shutdown the computer";
     }
+
+    @Override
+    public boolean isShellCommand() {
+        return true;
+    }
 }

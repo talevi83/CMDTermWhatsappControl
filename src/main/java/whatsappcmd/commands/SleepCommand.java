@@ -20,4 +20,9 @@ public class SleepCommand implements Command {
     public String getDescription() {
         return "Put the computer to sleep";
     }
+
+    @Override
+    public boolean isShellCommand() {
+        return true;
+    }
 }
