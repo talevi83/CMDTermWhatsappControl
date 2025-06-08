@@ -5,9 +5,9 @@ import whatsappcmd.CommandRegistry;
 public class HelpCommand implements Command {
     @Override
     public String execute(String[] args) {
-        StringBuilder sb = new StringBuilder("Available Commands:\n");
+        StringBuilder sb = new StringBuilder("*Available Commands:*\n");
         CommandRegistry.getAllCommands().forEach((name, cmd) -> {
-            sb.append("- ").append(name).append(": ").append(cmd.getDescription()).append("\n");
+            sb.append("*- ").append(name).append(":* ").append(cmd.getDescription()).append("\n");
         });
         return sb.toString();
     }
