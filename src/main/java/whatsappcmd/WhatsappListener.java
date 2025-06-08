@@ -71,7 +71,6 @@ public class WhatsappListener {
                     Command command = CommandExecutor.processMessage(userInput);
 
                     if (command != null) {
-                        // פקודה מוכרת (כל מצב - תמיד עובד)
                         String commandOutput = command.execute(new String[0]);
 
                         if (command.isShellCommand()) {
@@ -99,7 +98,6 @@ public class WhatsappListener {
                                 Thread.sleep(2);
                             }
                         } else {
-                            // פקודה שמחזירה output (למשל help)
                             SeleniumUtils.sendResponseOnWhatsapp(driver, commandOutput);
                         }
                     } else {
