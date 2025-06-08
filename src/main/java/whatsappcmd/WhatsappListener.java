@@ -65,20 +65,26 @@ public class WhatsappListener {
                     } else if(lastMessage.toLowerCase().equals("manual")) {
                         Thread.sleep(1);
                         sendManualAtStart();
+                        continue;
                     }
 
-                    lastMessage = MessageWrapperConstants.checkMessageForWrapper(lastMessage);
-                    if(Boolean.parseBoolean(properties.get("restricted.commands").toString()) && lastMessage.startsWith("Restricted commands is enabled.")) {
-                        SeleniumUtils.sendResponseOnWhatsapp(driver, lastMessage);
+                    String commandToRun = CommandExecutor.processMessage(lastMessage);
+                    if(commandToRun == null) {
+                        SeleniumUtils.sendResponseOnWhatsapp(driver, "Unknown command: " + commandToRun);
+                        continue;
+                    }
+                    if(Boolean.parseBoolean(properties.get("restricted.commands").toString()) && commandToRun.startsWith("Restricted commands is enabled.")) {
+                        SeleniumUtils.sendResponseOnWhatsapp(driver, commandToRun);
                     } else {
-                        if(lastMessage.contains("rundll32.exe powrprof.dll,SetSuspendState")) {
+                        if(commandToRun.contains("rundll32.exe powrprof.dll,SetSuspendState")) {
                             String msg = "Closing program before sleep...";
                             SeleniumUtils.sendResponseOnWhatsapp(driver, msg);
                             System.out.println(msg);
                             driver.quit();
+                            Thread.sleep(2);
                         }
-                        System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + lastMessage);
-                        Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, lastMessage});
+                        System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + commandToRun);
+                        Process process = Runtime.getRuntime().exec(new String[]{CMD_TERM, CMD_FLAG, commandToRun});
 
                         // Read the output from the command line.
                         BufferedReader reader = new BufferedReader(
@@ -110,11 +116,19 @@ public class WhatsappListener {
     }
 
     private static void sendManualAtStart() throws InterruptedException {
-        String commandsHelp = MessageWrapperConstants.getAvailableCommandsHelp();
+        String commandsHelp = getAvailableCommandsHelp();
         SeleniumUtils.sendResponseOnWhatsapp(driver, commandsHelp);
         if(Boolean.parseBoolean(properties.get("restricted.commands").toString())){
             SeleniumUtils.sendResponseOnWhatsapp(driver, "**Please Note! Restricted commands is Enabled!*");
         }
+    }
+
+    private static String getAvailableCommandsHelp() {
+        StringBuilder sb = new StringBuilder("Available Commands:\n");
+        CommandRegistry.getAllCommands().forEach((name, cmd) -> {
+            sb.append("- ").append(name).append(": ").append(cmd.getDescription()).append("\n");
+        });
+        return sb.toString();
     }
 
     private static boolean checkMessageTime(String lastMessage) {
@@ -138,4 +152,6 @@ public class WhatsappListener {
         }
 
     }
+
+
 }

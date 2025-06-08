@@ -8,9 +8,9 @@ import java.util.Properties;
 
 public abstract class GlobalVariables {
 
-    protected static Properties properties = loadPropertiesFile();
+    public static Properties properties = loadPropertiesFile();
 
-    protected static final String OS = System.getProperty("os.name");
+    public static final String OS = System.getProperty("os.name");
     protected static final String HOME_DIRECTORY = System.getProperty("user.home");
     protected static final String CHROME_PROFILE_PATH = OS.toLowerCase().contains("windows") ?
             HOME_DIRECTORY + properties.getProperty("chrome.profile.windows.path") :
