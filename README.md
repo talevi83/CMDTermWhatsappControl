@@ -20,6 +20,7 @@ CMDWhatsappControl is a Java application that listens to WhatsApp Web via Seleni
 - Restricted commands flag - restrict to using only the commands that are preset in the program.
 - The program is sending manual at starting (if not send "CMD: manual").
 - Built using Maven — no need to manually install ChromeDriver.
+- Secure password handling for sudo commands on macOS with optional encrypted storage.
 
 ---
 
@@ -43,9 +44,6 @@ To find your Chrome profile path:
 ## ⚙️ Configuration File: `config.properties`
 
 Place the following file in the **same directory as the JAR**:
-* The MacOS password is for Mac users that wants to run sudo commands.
-* This feature is not complete and fit for all the commands but integrated in shutdown command.
-* Please note that the password in NOT encrypted.
 
 ```properties
 # For macOS:
@@ -57,12 +55,20 @@ chrome.profile.windows.path = \\AppData\\Local\\Google\\Chrome\\User Data\\profi
 # WhatsApp chat name (can be a person or group)
 whatsapp.contact = <contact_or_group>
 
-# MacOS user password:
-mac.password = <your_password>
-
 # Restricted commands - When enabled, you can use only the commands that are preset in the program.
 restricted.commands = true
 ```
+
+### Password Handling for macOS
+
+The application now includes a secure password handling system for sudo commands on macOS:
+
+1. **Interactive Mode**: When a sudo command is executed, the application will prompt for the password in the terminal.
+2. **Secure Storage**: You can choose to save the password securely using AES encryption. The encrypted password is stored in your home directory under `.whatsappcmd/`.
+3. **Security**: The password is never stored in plain text, and the encryption key is derived using PBKDF2 with a random salt.
+
+To clear a stored password, you can delete the files in `~/.whatsappcmd/` or use the application's built-in password management.
+
 ---
 
 ## 🛠️ Build & Run

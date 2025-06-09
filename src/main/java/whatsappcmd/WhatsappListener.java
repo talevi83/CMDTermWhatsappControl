@@ -135,6 +135,7 @@ public class WhatsappListener {
     private static void sendManualAtStart() throws InterruptedException {
         String commandsHelp = getAvailableCommandsHelp();
         SeleniumUtils.sendResponseOnWhatsapp(driver, commandsHelp);
+        SeleniumUtils.sendResponseOnWhatsapp(driver, "- close program: \tclosing the program.");
         if(Boolean.parseBoolean(properties.get("restricted.commands").toString())){
             SeleniumUtils.sendResponseOnWhatsapp(driver, "**Please Note! Restricted commands is Enabled!*");
         }
