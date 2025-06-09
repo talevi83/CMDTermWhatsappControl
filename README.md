@@ -59,6 +59,9 @@ mac.password = <your_password>
 
 # Restrict commands to only those preset in the program (true/false)
 restricted.commands = true
+
+# Run in headless mode - the browser is not presented and run in the background.
+headless.mode = true
 ```
 ---
 
