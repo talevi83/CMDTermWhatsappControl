@@ -68,10 +68,11 @@ public class WhatsappListener {
                     boolean isRestrictedMode = Boolean.parseBoolean(properties.get("restricted.commands").toString());
                     String userInput = lastMessage;
 
-                    Command command = CommandExecutor.processMessage(userInput);
+                    CommandExecutor.CommandResult result = CommandExecutor.processMessage(userInput);
+                    Command command = result.getCommand();
 
                     if (command != null) {
-                        String commandOutput = command.execute(new String[0]);
+                        String commandOutput = command.execute(result.getArgs());
 
                         if (command.isShellCommand()) {
                             System.out.println("Trying to run: " + CMD_TERM + " " + CMD_FLAG + " " + commandOutput);
@@ -168,8 +169,5 @@ public class WhatsappListener {
             System.out.println(e.getMessage());
             return false;
         }
-
     }
-
-
 }
