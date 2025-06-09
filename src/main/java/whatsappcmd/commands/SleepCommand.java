@@ -10,18 +10,19 @@ import static whatsappcmd.GlobalVariables.*;
 public class SleepCommand implements Command {
     @Override
     public String execute(String[] args) {
-        try {
-            SeleniumUtils.sendResponseOnWhatsapp(driver, "Putting computer to sleep in 3 seconds...");
-            Thread.sleep(3000); // Give user time to see the message
-        } catch (InterruptedException e) {
-            return "Error sending response: " + e.getMessage();
-        }
-
         if(OS.toLowerCase().contains("windows")) {
-            // Execute the sleep command
+            try {
+                SeleniumUtils.sendResponseOnWhatsapp(driver, "Putting computer to sleep in 3 seconds...");
+                Thread.sleep(3000); // Give user time to see the message
+            } catch (InterruptedException e) {
+                return "Error sending response: " + e.getMessage();
+            }
             return "rundll32.exe powrprof.dll,SetSuspendState 0,1,0";
         } else if(OS.toLowerCase().contains("mac")) {
             try {
+                SeleniumUtils.sendResponseOnWhatsapp(driver, "Putting computer to sleep in 3 seconds...");
+                Thread.sleep(3000); // Give user time to see the message
+                
                 // Create a temporary script file
                 File scriptFile = File.createTempFile("sudo_script", ".sh");
                 scriptFile.setExecutable(true);
@@ -29,7 +30,7 @@ public class SleepCommand implements Command {
                 // Write the sudo command to the script
                 try (FileWriter writer = new FileWriter(scriptFile)) {
                     writer.write("#!/bin/sh\n");
-                    writer.write("echo '" + PasswordManager.getPassword() + "' | sudo -S shutdown -s now\n");
+                    writer.write("echo '" + PasswordManager.getPassword() + "' | sudo -S pmset sleepnow\n");
                 }
 
                 // Execute the script
@@ -61,6 +62,13 @@ public class SleepCommand implements Command {
                 return "Error executing sleep command: " + e.getMessage();
             }
         } else {
+            // Linux
+            try {
+                SeleniumUtils.sendResponseOnWhatsapp(driver, "Putting computer to sleep in 3 seconds...");
+                Thread.sleep(3000); // Give user time to see the message
+            } catch (InterruptedException e) {
+                return "Error sending response: " + e.getMessage();
+            }
             return "systemctl suspend";
         }
     }
@@ -72,6 +80,7 @@ public class SleepCommand implements Command {
 
     @Override
     public boolean isShellCommand() {
-        return true;
+        // Only return true for Windows and Linux, as we handle Mac execution internally
+        return !OS.toLowerCase().contains("mac");
     }
 }
