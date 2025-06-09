@@ -16,7 +16,6 @@ public class PasswordManager {
     private static final String SALT_FILE = System.getProperty("user.home") + "/.whatsappcmd/salt.dat";
     private static final int ITERATIONS = 65536;
     private static final int KEY_LENGTH = 256;
-    private static SecretKey key = null;
 
     public static String getPassword() {
         // First try to get password from encrypted storage
@@ -25,7 +24,7 @@ public class PasswordManager {
             return storedPassword;
         }
 
-        // If no stored password, prompt user
+        // If no stored password or decryption failed, prompt user
         return promptForPassword();
     }
 
@@ -56,11 +55,11 @@ public class PasswordManager {
         byte[] salt = new byte[16];
         random.nextBytes(salt);
 
-        // Create the key
+        // Create the key using the password itself
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
         SecretKey tmpKey = factory.generateSecret(spec);
-        key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
+        SecretKey key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
 
         // Encrypt the password
         Cipher cipher = Cipher.getInstance("AES");
@@ -85,18 +84,31 @@ public class PasswordManager {
             byte[] salt = Files.readAllBytes(Paths.get(SALT_FILE));
             byte[] encryptedPassword = Base64.getDecoder().decode(Files.readAllBytes(Paths.get(KEY_FILE)));
 
-            // Recreate the key
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-            PBEKeySpec spec = new PBEKeySpec("dummy".toCharArray(), salt, ITERATIONS, KEY_LENGTH);
-            SecretKey tmpKey = factory.generateSecret(spec);
-            key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
+            // First, try to decrypt with the stored password
+            // If that fails, we'll prompt for a new password
+            try {
+                // We need to prompt for the password to decrypt
+                System.out.println("Please enter your password to decrypt the stored credentials: ");
+                Scanner scanner = new Scanner(System.in);
+                String decryptionPassword = scanner.nextLine();
 
-            // Decrypt the password
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] decryptedPassword = cipher.doFinal(encryptedPassword);
+                // Create the key using the provided password
+                SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+                PBEKeySpec spec = new PBEKeySpec(decryptionPassword.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
+                SecretKey tmpKey = factory.generateSecret(spec);
+                SecretKey key = new SecretKeySpec(tmpKey.getEncoded(), "AES");
 
-            return new String(decryptedPassword);
+                // Try to decrypt
+                Cipher cipher = Cipher.getInstance("AES");
+                cipher.init(Cipher.DECRYPT_MODE, key);
+                byte[] decryptedPassword = cipher.doFinal(encryptedPassword);
+                return new String(decryptedPassword);
+            } catch (Exception e) {
+                System.err.println("Failed to decrypt stored password. Will prompt for a new password.");
+                // Clear the stored files since they're invalid
+                clearStoredPassword();
+                return null;
+            }
         } catch (Exception e) {
             System.err.println("Error reading stored password: " + e.getMessage());
             return null;
@@ -107,6 +119,7 @@ public class PasswordManager {
         try {
             Files.deleteIfExists(Paths.get(KEY_FILE));
             Files.deleteIfExists(Paths.get(SALT_FILE));
+            System.out.println("Stored password cleared successfully.");
         } catch (IOException e) {
             System.err.println("Error clearing stored password: " + e.getMessage());
         }
