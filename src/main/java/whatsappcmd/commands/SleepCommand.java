@@ -72,6 +72,6 @@ public class SleepCommand implements Command {
 
     @Override
     public boolean isShellCommand() {
-        return false; // Changed to false since we're handling the command execution ourselves
+        return true;
     }
 }
