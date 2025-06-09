@@ -28,5 +28,6 @@ public class Main {
         CommandRegistry.registerCommand("shutdown", new ShutdownCommand());
         CommandRegistry.registerCommand("cancelshutdown", new CancelShutdownCommand());
         CommandRegistry.registerCommand("help", new HelpCommand());
+        CommandRegistry.registerCommand("setup", new SetupCommand());
     }
 }
