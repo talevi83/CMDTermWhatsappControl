@@ -1,3 +1,5 @@
+config.properties
+
 # Maven build folders
 /target/
 /build/
