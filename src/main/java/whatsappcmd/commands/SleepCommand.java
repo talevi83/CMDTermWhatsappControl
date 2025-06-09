@@ -1,11 +1,9 @@
 package whatsappcmd.commands;
 
-import whatsappcmd.GlobalVariables;
 import whatsappcmd.security.PasswordManager;
 import whatsappcmd.SeleniumUtils;
 
 import java.io.*;
-import java.util.Arrays;
 
 import static whatsappcmd.GlobalVariables.*;
 

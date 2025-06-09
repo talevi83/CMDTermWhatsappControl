@@ -90,6 +90,7 @@ restricted.commands = true
 
 | Command          | Description                                    |
 |------------------|------------------------------------------------|
+| setup            | Set up or manage the sudo password for remote commands |
 | sleep            | Put the computer to sleep                      |
 | internal ip      | Get the internal (local) IP address            |
 | cancel shutdown  | Cancel a pending shutdown (Windows only)       |
@@ -97,3 +98,5 @@ restricted.commands = true
 | shutdown         | Shutdown the computer                          |
 | close program    | Closing the program and shutdown WebDriver.    |
 | manual           | Get this manual.                               |
+
+> **Note:** For macOS users, you need to set up your sudo password using the `setup` command before using commands that require sudo privileges (like sleep and shutdown). Use `CMD: setup <your_password>` to set the password, or `CMD: setup clear` to remove it.

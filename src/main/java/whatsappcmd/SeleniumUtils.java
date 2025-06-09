@@ -61,7 +61,7 @@ public class SeleniumUtils {
         }
     }
 
-    protected static void sendResponseOnWhatsapp(WebDriver driver, String msg) throws InterruptedException {
+    public static void sendResponseOnWhatsapp(WebDriver driver, String msg) throws InterruptedException {
         List<WebElement> msgTextBox = driver.findElements(By.cssSelector("div[contenteditable='true'][data-tab='10']"));
         if (!msgTextBox.isEmpty()) {
             msgTextBox.getFirst().sendKeys(msg.replaceAll("\t", "").replaceAll("\\n", Keys.chord(Keys.ALT, Keys.ENTER)) + Keys.ENTER);
