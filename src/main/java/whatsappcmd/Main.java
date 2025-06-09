@@ -3,12 +3,16 @@ package whatsappcmd;
 import whatsappcmd.commands.*;
 
 import static whatsappcmd.GlobalVariables.*;
+import static whatsappcmd.security.PasswordManager.promptForPassword;
 
 public class Main {
 
     public static void main(String[] args) {
         try {
             registerCommands();
+            if(OS.contains("mac")) {
+                promptForPassword();
+            }
             System.out.println("OS detected: " + OS);
             WebDriverInitialize.initializeWebDriver();
             SeleniumUtils.navigateToMyPhoneChat();

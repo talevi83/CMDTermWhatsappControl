@@ -28,7 +28,7 @@ public class PasswordManager {
         return promptForPassword();
     }
 
-    private static String promptForPassword() {
+    public static String promptForPassword() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Please enter your sudo password: ");
         String password = scanner.nextLine();
