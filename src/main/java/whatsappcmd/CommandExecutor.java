@@ -5,9 +5,15 @@ import whatsappcmd.commands.Command;
 public class CommandExecutor {
     protected static CommandResult processMessage(String message) {
         String[] parts = message.trim().split("\\s+");
+        if (parts.length == 0) {
+            return new CommandResult(null, new String[0]);
+        }
+        
         String commandName = parts[0];
-        String[] args = new String[parts.length - 1];
-        System.arraycopy(parts, 1, args, 0, args.length);
+        String[] args = parts.length > 1 ? new String[parts.length - 1] : new String[0];
+        if (args.length > 0) {
+            System.arraycopy(parts, 1, args, 0, args.length);
+        }
 
         Command command = CommandRegistry.getCommand(commandName);
         return new CommandResult(command, args);
