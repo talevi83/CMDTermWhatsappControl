@@ -2,6 +2,7 @@ package whatsappcmd.commands;
 
 import whatsappcmd.GlobalVariables;
 import whatsappcmd.security.PasswordManager;
+import whatsappcmd.SeleniumUtils;
 
 import java.io.*;
 import java.util.Arrays;
@@ -11,7 +12,15 @@ import static whatsappcmd.GlobalVariables.*;
 public class SleepCommand implements Command {
     @Override
     public String execute(String[] args) {
+        try {
+            SeleniumUtils.sendResponseOnWhatsapp(driver, "Putting computer to sleep in 3 seconds...");
+            Thread.sleep(3000); // Give user time to see the message
+        } catch (InterruptedException e) {
+            return "Error sending response: " + e.getMessage();
+        }
+
         if(OS.toLowerCase().contains("windows")) {
+            // Execute the sleep command
             return "rundll32.exe powrprof.dll,SetSuspendState 0,1,0";
         } else if(OS.toLowerCase().contains("mac")) {
             try {

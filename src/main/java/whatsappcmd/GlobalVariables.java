@@ -20,7 +20,7 @@ public abstract class GlobalVariables {
     protected static String CMD_TERM = OS.toLowerCase().contains("windows") ? "cmd.exe" : "/bin/sh";
     protected static String CMD_FLAG = OS.toLowerCase().contains("windows") ? "/c" : "-c";
 
-    protected static WebDriver driver;
+    public static WebDriver driver;
 
     private static Properties loadPropertiesFile() {
         try {
